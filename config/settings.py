@@ -21,7 +21,9 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-CUSTOM_APPS = []
+CUSTOM_APPS = [
+    "api",
+]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
@@ -40,6 +42,7 @@ INSTALLED_APPS = CUSTOM_APPS + THIRD_PARTY_APPS + DEFAULT_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -104,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 
@@ -115,8 +118,82 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# CELERY SETTINGS
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_URL = "redis://redis:6379/0"
+CELERY_TIMEZONE = "Asia/Kolkata"
+CELERY_TASK_TRACK_STARTED = True
+
+# LOGGING SETTINGS
+_logging_path: str = os.path.join(BASE_DIR, "logs")
+if not os.path.exists(_logging_path):
+    os.makedirs(_logging_path)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{asctime} | {levelname} | {module} | {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{asctime} | {levelname} | {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "error_file": {
+            "level": "ERROR",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(_logging_path, "django_errors.log"),
+            "formatter": "verbose",
+            "maxBytes": 10 * 1024 * 1024,  # 10MB per file
+            "backupCount": 5,  # Keep last 5 logs
+        },
+        "celery_file": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(_logging_path, "celery_tasks.log"),
+            "formatter": "simple",
+            "maxBytes": 10 * 1024 * 1024,  # 10MB per file
+            "backupCount": 5,  # Keep last 5 logs
+        },
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["error_file", "console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["error_file"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "celery": {
+            "handlers": ["celery_file", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
