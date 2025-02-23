@@ -23,9 +23,10 @@ def send_email_newsletter(sub, message):
     emails = EmailModel.objects.all()
     users: list[str] = [x.email for x in emails]
 
-    send_mail(
-        subject=sub,
-        message=message,
-        recipient_list=users,
-        from_email="bitsj2@gmail.com",
-    )
+    for user in users:
+        send_mail(
+            subject=sub,
+            message=message,
+            recipient_list=[user],
+            from_email="bitsj2@gmail.com",
+        )
