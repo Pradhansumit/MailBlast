@@ -27,6 +27,7 @@ CUSTOM_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "django_celery_results",
 ]
 
 DEFAULT_APPS = [
@@ -127,8 +128,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # CELERY SETTINGS
-CELERY_BROKER_URL = "redis://redis:6379/0"
-CELERY_RESULT_URL = "redis://redis:6379/0"
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "django-db"
 CELERY_TIMEZONE = "Asia/Kolkata"
 CELERY_TASK_TRACK_STARTED = True
 
@@ -176,18 +177,18 @@ LOGGING = {
     "loggers": {
         "django": {
             "handlers": ["error_file", "console"],
-            "level": "ERROR",
-            "propagate": False,
+            "level": "DEBUG",
+            "propagate": True,
         },
         "django.request": {
             "handlers": ["error_file"],
             "level": "ERROR",
-            "propagate": False,
+            "propagate": True,
         },
         "celery": {
             "handlers": ["celery_file", "console"],
-            "level": "INFO",
-            "propagate": False,
+            "level": "DEBUG",
+            "propagate": True,
         },
     },
 }
@@ -197,3 +198,6 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+# EMAIL SETTINGS
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

@@ -13,7 +13,7 @@ logger = logging.getLogger("django")
 class User_Subscribe(APIView):
     def post(self, request, format=None):
         try:
-            email = request["email"]
+            email = request.data["email"]
             serializer = EmailSerializer(data={"email": email})
             if not serializer.is_valid():
                 return Response(
