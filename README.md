@@ -14,7 +14,7 @@
 
 - **Backend:** Django, Django REST Framework (DRF)
 - **Database:** PostgreSQL
-- **Background Tasks:** Celery + RabbitMQ (message broker)
+- **Background Tasks:** Celery + Redis (message broker)
 - **Web Server:** Gunicorn
 
 ---
@@ -37,6 +37,12 @@ SECRET_KEY=your_secret_key
 DEBUG=False
 ALLOWED_HOSTS=*
 DATABASE_URL=postgres://myuser:password@pgdb:5432/newsletter
+
+EMAIL_HOST = email_host
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = your gmail address
+EMAIL_HOST_PASSWORD = gmail password
 ```
 
 ## 📡 API Endpoints

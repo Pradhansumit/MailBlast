@@ -23,10 +23,14 @@ def send_email_newsletter(sub, message):
     emails = EmailModel.objects.all()
     users: list[str] = [x.email for x in emails]
 
+    import os
+
+    fromemail = os.getenv("EMAIL_HOST_USER")
+
     for user in users:
         send_mail(
             subject=sub,
             message=message,
             recipient_list=[user],
-            from_email="bitsj2@gmail.com",
+            from_email=fromemail,
         )
