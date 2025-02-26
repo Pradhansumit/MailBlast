@@ -1,4 +1,4 @@
-# Newsletter (Django, PostgreSQL, Celery)
+# MailBlast (Django, PostgreSQL, Celery)
 
 🚀 A **small microservice Newsletter** built with Django, PostgreSQL, and Celery.
 
