@@ -2,6 +2,8 @@
 
 🚀 A **small microservice Newsletter** built with Django, PostgreSQL, and Celery.
 
+https://github.com/user-attachments/assets/fc113d72-9a89-41e1-800e-50bea1bf8471
+
 ## 🌟 Features
 
 ✅ Sends bulk email to all subscribers.
